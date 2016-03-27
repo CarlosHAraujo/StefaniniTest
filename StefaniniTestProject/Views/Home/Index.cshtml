@@ -1,0 +1,91 @@
+﻿@model CustomerListViewModel
+
+@{
+    ViewBag.Title = "Customer List";
+}
+
+<h1>
+    Customer List
+</h1>
+<hr />
+@Html.Partial("Search", Model.Search)
+<hr />
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].Classification)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].Phone)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].Gender)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].City)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].Region)</th>
+                    <th>@Html.DisplayNameFor(model => model.Customers[0].LastPurchase)</th>
+                    @if (ViewData["IsAdmin"] != null && ((bool)ViewData["IsAdmin"]))
+                    {
+                        <th>@Html.DisplayNameFor(model => model.Customers[0].Seller)</th>
+                    }
+                    else
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Customers.Count > 0)
+                {
+                    foreach (var item in Model.Customers)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(i => item.Classification)</td>
+                            <td>@Html.DisplayFor(i => item.Name)</td>
+                            <td>@Html.DisplayFor(i => item.Phone)</td>
+                            <td>@Html.DisplayFor(i => item.Gender)</td>
+                            <td>@Html.DisplayFor(i => item.City)</td>
+                            <td>@Html.DisplayFor(i => item.Region)</td>
+                            <td>@Html.DisplayFor(i => item.LastPurchase)</td>
+                            @if (ViewData["IsAdmin"] != null && ((bool)ViewData["IsAdmin"]))
+                            {
+                                <td>@Html.DisplayFor(i => item.Seller)</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td class="text-center" colspan="8">No results.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $("#CityDropdown").on('change', function () {
+            var cityId = $(this).val();
+            var url = '@Url.Action("GetRegions", "Home")' + '?cityId=' + cityId;
+            var regions = $.getJSON(url, function (data) {
+                if (data) {
+                    var regionDropdown = $("#RegionDropdown");
+                    var caption = $("#RegionDropdown option:first");
+                    regionDropdown.empty();
+                    regionDropdown.append(caption);
+                    $.each(data, function (index, option) {
+                        var optionTag = document.createElement("option");
+                        optionTag.setAttribute("value", option.Value);
+                        optionTag.text = option.Text;
+                        regionDropdown.append(optionTag);
+                    });
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Teste Stefanini</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/datetimepicker")
+</head>
+<body>
+    <div class="container body-content">
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <p class="text-right">
+                <a href="javascript: $.post('@Url.Action("Logout", "Login")', function(data) { if(data.success) { location.reload() } else { alert(data.error); } })">Sair</a>
+            </p>
+        }
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Teste Stefanini</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datetimepicker")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            $('.datetimepicker').datetimepicker({
+                format: 'MM/DD/YYYY',
+                showClear: true,
+                showClose: true,
+                debug: true
+            });
+        });
+    </script>
+</body>
+</html>
